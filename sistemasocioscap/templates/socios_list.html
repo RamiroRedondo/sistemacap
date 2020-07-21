@@ -1,0 +1,19 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+    <h1>Socios List</h1>
+
+    {% if socio_list %}
+    <ul>
+
+      {% for socio in socio_list %}
+      <li>
+        <a href="{{ socio.get_absolute_url }}">{{ socio.nombre }}</a> ({{socio.apellido}})
+      </li>
+      {% endfor %}
+
+    </ul>
+    {% else %}
+      <p>There are no books in the library.</p>
+    {% endif %}       
+{% endblock %}

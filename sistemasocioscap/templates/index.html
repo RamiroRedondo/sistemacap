@@ -1,0 +1,57 @@
+{% extends "base_generic.html" %}
+{% block content %}
+<li><a href="{% url 'index' %}">Home</a></li> 
+<li><a href="{% url 'admin:index' %}">Administracion</a></li> 
+<h1>Sistema de socios - Home</h1>
+
+
+<h2>Listado de socios</h2>
+
+  <p>Total de socios:</p>
+  <ul>
+    <li><strong>Total:</strong> {{ tot_socios }}</li>
+  
+  </ul>
+  <style>
+  table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+  }
+
+  td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+  }
+
+tr:nth-child(even) {
+  background-color: #dddddd;
+}
+</style>
+
+<table class="tablasocios" style="">
+
+  <tr>
+    <th scope="row">Nombre</th>
+    <th>Apellido</th>
+    <th>Dni </th>
+    <th>Direccion</th>
+  </tr>
+  {% for socio in socios %}
+  <tr>
+
+    <td>{{socio.nombre}}</td>
+
+    <td>{{socio.apellido}}</td>
+
+    <td>{{socio.dni}}</td>
+    <td>{{socio.direccion}}</td>
+
+  </tr>
+  {% endfor %}
+ 
+</table>
+{% endblock %}
+{% load static %} 
+<link rel="stylesheet" href="{% static 'css/styles.css' %}">
