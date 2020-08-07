@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 
 from django.db import models
 from django.contrib import admin
+from django.urls import reverse
 
 
 class Poll(models.Model):
@@ -32,7 +33,8 @@ class Socio (models.Model):
 	direccion = models.CharField (max_length = 200)
 	mail = models.EmailField(max_length=254, null=True)
 	cbu = models.IntegerField (null=True)
-	registropago = models.OneToOneField(RegistroPagos, null = True)
+	dar_baja = models.CharField(max_length=32,choices=[('si', 'Si'),('no', 'No')], default="",null = True, blank=True)
+	registropago = models.OneToOneField(RegistroPagos, null = True, blank=True)
 	#anioocuota = models.ManyToManyField(Anual, help_text="Año cuota")
   	def get_absolute_url(self):
     		return reverse ('socio-detail', args=[str(self.id)])
@@ -41,7 +43,7 @@ class Socio (models.Model):
 class Anual (models.Model):
 
 	anio = models.CharField (max_length = 200)
-	registro_anio = models.ForeignKey('RegistroPagos', on_delete=models.SET_NULL, null=True)
+	registro_anio = models.ForeignKey('RegistroPagos', on_delete=models.SET_NULL, null=True, blank=True)
 	def __str__(self):
     		return self.anio
   	def get_absolute_url(self):
@@ -50,9 +52,9 @@ class Anual (models.Model):
 class Cuota(models.Model):
 	"""docstring for Cuota"""
 	nrocuota = models.CharField (max_length = 200)
-	mes = models.CharField (max_length = 200)
-	fecha_pago = models.DateField()
-	anioocuota = models.ForeignKey('Anual', on_delete=models.SET_NULL, null=True)
+	mes = models.CharField (max_length = 200, null=True, blank=True)
+	fecha_pago = models.DateField(null=True, blank=True)
+	anioocuota = models.ForeignKey('Anual', on_delete=models.SET_NULL, null=True, blank=True)
     # ForeignKey, ya que una cuota tiene un solo año, pero el mismo año puede tener muchas cuotas.
     # 
 	def __str__(self):

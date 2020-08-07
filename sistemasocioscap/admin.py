@@ -17,7 +17,7 @@ from .models import RegistroPagos
 class SocioAdmin(admin.ModelAdmin):
 	list_filter = ('apellido','nombre')
 	list_display = ['apellido','nombre','nrosocio','dni','direccion']
-	fields = ['nombre','apellido','nrosocio','dni','direccion', 'fecha_nacimiento', 'mail', 'cbu', 'registropago']
+	fields = ['nombre','apellido','nrosocio','dni','direccion', 'fecha_nacimiento', 'mail', 'cbu','dar_baja', 'registropago']
 admin.site.register(Socio, SocioAdmin)
 admin.site.register(Anual)
 admin.site.register(Cuota)

@@ -22,10 +22,17 @@ from django.conf.urls.static import static
 
 urlpatterns = [
 	
-    url(r'^admin/', admin.site.urls),
-   # url(r'^inicio/', include('sistemasocioscap.urls')),
+url(r'^admin/', admin.site.urls),
 
 ]
+urlpatterns += [
+    url(r'^index/', include('sistemasocioscap.urls')),
+]
+urlpatterns += [
+    url(r'^sistemasocioscap/', include('sistemasocioscap.urls')),
+]
+
+"""
 urlpatterns += [
     url(r'^index/', include('sistemasocioscap.urls')),
 ]
@@ -33,4 +40,5 @@ urlpatterns += [
     url('', RedirectView.as_view(url='/index/', permanent=True)),
 
 ]
+"""
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
