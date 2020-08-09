@@ -31,7 +31,10 @@ urlpatterns += [
 urlpatterns += [
     url(r'^sistemasocioscap/', include('sistemasocioscap.urls')),
 ]
+urlpatterns += [
+    url('', RedirectView.as_view(url='/index/', permanent=True)),
 
+]
 """
 urlpatterns += [
     url(r'^index/', include('sistemasocioscap.urls')),

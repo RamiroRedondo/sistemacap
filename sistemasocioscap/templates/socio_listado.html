@@ -25,7 +25,7 @@ tr:nth-child(even) {
 </style>
 
 <table class="tablasocios" style="">
-  {% if socios %}
+  {% if object_list %}
   <tr>
     <th scope="row">Nombre</th>
     <th>Apellido</th>
@@ -33,7 +33,7 @@ tr:nth-child(even) {
     <th>Direccion</th>
     <th>Acciones</th>
   </tr>
-  {% for socio in socios %}
+  {% for socio in object_list %}
   <tr>
 
     <td>{{socio.nombre}}</td>
@@ -42,7 +42,10 @@ tr:nth-child(even) {
 
     <td>{{socio.dni}}</td>
     <td>{{socio.direccion}}</td>
-    <td>  <a href="">{{socio.id}}</a></td>
+    <td>
+    	<a class="btn btn-primary" href="{% url 'socio_editar' socio.id %}">Editar</a>
+    	<a class="btn btn-danger" href="{% url 'socio_eliminar' socio.id %}">Eliminar</a>
+    </td>
 
 
   </tr>

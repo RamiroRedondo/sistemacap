@@ -2,8 +2,9 @@
 from django.http import HttpResponse
 from django.template import loader, Context
 from .models import Socio, RegistroPagos
+from django.core.urlresolvers import reverse_lazy
 from django.shortcuts import render, redirect
-from django.views import generic
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from .forms import SocioForm
 
 def index(request):
@@ -63,21 +64,31 @@ def socio_edit(request, id_socio):
         return redirect('listado_socios')
     return render (request, 'socio_form.html',{'form': form})
 
-class SocioListView(generic.ListView):
+def socio_delete(request, id_socio):
+    socio = Socio.objects.get(id= id_socio)
+    if request.method == 'POST':
+        socio.delete()
+        return redirect('listado_socios')
+    return render (request, 'socio_delete.html',{'socio': socio})
+
+
+class SocioList(ListView):
     model = Socio
-    paginate_by = 5
-    def get_queryset(self):
-        return Socio.objects.all()
+    template_name = 'socio_listado.html'
 
+class SocioCreate(CreateView):
+    model = Socio
+    form_class = SocioForm
+    template_name = 'socio_form.html'
+    success_url = reverse_lazy('listado_socios')
 
+class SocioUpdate(UpdateView):
+    model = Socio
+    form_class = SocioForm
+    template_name = 'socio_form.html'
+    success_url = reverse_lazy('listado_socios')
 
-"""
-def index(request):
-    return HttpResponse("Hello, world. You're at the polls index.")
-
-def archive(request):
-	socios = Socio.objects.all()
-	mi_template = loader.get_template("archivo.html")
-	mi_contexto = Context({'socios:':socios})
-	return HttpResponse(mi_template.render(mi_contexto))
-"""
+class SocioDelete(DeleteView):
+    model = Socio
+    template_name = 'socio_delete.html'
+    success_url = reverse_lazy('listado_socios')

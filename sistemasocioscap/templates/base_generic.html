@@ -20,7 +20,8 @@
   <div class="topnav">
   <a href="{% url 'index' %}">Inicio</a>
   <a href="{% url 'admin:index' %}">Administración</a>
-  <a href="">Nuevo socio</a>
+  <a href="{% url 'socio_crear' %}">Nuevo socio</a>
+  <a href="{% url 'listado_socios' %}">Listado</a>
   <a hrefs="#about">Otros</a>
 </div>
 
