@@ -15,7 +15,7 @@ class SocioForm(forms.ModelForm):
 			'mail',
 			'cbu',
 			'dar_baja',
-			'registropago',
+		
 		]
 		labels = {
 			'nombre': 'Nombre',
@@ -27,7 +27,7 @@ class SocioForm(forms.ModelForm):
 			'mail': 'E-Mail',
 			'cbu':'CBU',
 			'dar_baja': 'Dar de baja',
-			'registropago':'Registro de pago',
+		
 		}
 		widgets = {
 			'nombre': forms.TextInput(attrs={'class':'form-control'}),
@@ -39,6 +39,6 @@ class SocioForm(forms.ModelForm):
 			'mail': forms.TextInput(attrs={'class':'form-control'}),
 			'cbu': forms.TextInput(attrs={'class':'form-control'}),
 			'dar_baja': forms.TextInput(attrs={'class':'form-control'}),
-			'registropago':forms.Select(attrs={'class':'form-control'}),
+	
 
 		}
