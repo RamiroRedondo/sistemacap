@@ -14,7 +14,7 @@ class Socio (models.Model):
 	dni = models.IntegerField ()
 	nombre = models.CharField(max_length= 200, help_text="Ingrese el nombre del usuario")
 	apellido = models.CharField (max_length = 200)
-	fecha_nacimiento = models.DateField(help_text="Ingrese el fecha de nacimiento en formato AAAA-MM-DD, por ejemplo: 1990-06-15")
+	fecha_nacimiento = models.DateField(help_text="Ingrese el fecha de nacimiento en formato MES/DIA/AÑO")
 	nrosocio = models.IntegerField ()
 	direccion = models.CharField (max_length = 200)
 	mail = models.EmailField(max_length=254, null=True)

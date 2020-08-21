@@ -22,7 +22,11 @@ tr:nth-child(even) {
   background-color: #dddddd;
 }
 </style>
-
+<form method="get">
+  <input type="text" class="form-control" placeholder="Buscar..." name="buscar" value="{{ request.get.buscar }}">
+  <button type="submit" class="btn btn-success">Buscar</button>
+  
+</form>
 <table class="tablasocios" style="">
   {% if socios %}
   <tr>

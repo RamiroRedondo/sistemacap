@@ -1,6 +1,10 @@
 {% extends "base_generic.html" %}
 {% block content %}
-
+ <script>
+      $(function () {
+        $("#datetimepicker1").datetimepicker();
+      });
+    </script>
 <form method="post">
 	{% csrf_token %}
 	{{ form.as_p }}

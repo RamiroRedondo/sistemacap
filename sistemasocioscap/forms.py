@@ -1,6 +1,11 @@
 from django import forms
 from .models import Socio
+from django.contrib.admin import widgets
+import datetime
 
+class DateInput(forms.DateInput):
+    input_type = 'date'
+    
 class SocioForm(forms.ModelForm):
 	class Meta:
 		model = Socio
@@ -33,12 +38,11 @@ class SocioForm(forms.ModelForm):
 			'nombre': forms.TextInput(attrs={'class':'form-control'}),
 			'apellido': forms.TextInput(attrs={'class':'form-control'}),
 			'dni': forms.TextInput(attrs={'class':'form-control'}),
-			'fecha_nacimiento': forms.TextInput(attrs={'class':'form-control'}),
+			'fecha_nacimiento': DateInput(),
 			'nrosocio': forms.TextInput(attrs={'class':'form-control'}),
 			'direccion': forms.TextInput(attrs={'class':'form-control'}),
 			'mail': forms.TextInput(attrs={'class':'form-control'}),
 			'cbu': forms.TextInput(attrs={'class':'form-control'}),
 			'dar_baja': forms.TextInput(attrs={'class':'form-control'}),
 	
-
 		}
