@@ -1,11 +1,7 @@
 {% extends "base_generic.html" %}
 {% block content %}
-<h2>Formulario de socio</h2>
- <script>
-      $(function () {
-        $("#datetimepicker1").datetimepicker();
-      });
-    </script>
+<h2>Detalle de cuota</h2>
+
 <form method="post">
 	{% csrf_token %}
 	{{ form.as_p }}

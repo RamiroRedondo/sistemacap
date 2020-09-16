@@ -1,0 +1,108 @@
+{% extends "base_generic.html" %}
+{% block content %}
+
+  <style>
+  table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+    text-align: center;
+  }
+
+  td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+  }
+
+tr:nth-child(even) {
+  background-color: #dddddd;
+}
+</style>
+<h3>
+    Socio : {{ socio.nombre }} {{socio.apellido}}
+</h3>
+<h4>Registro de pago numero {{ socio.registro.numeroregistro }}</h4>
+<table class="tablasocios" style="text-align:center;">
+  {% if socio %}
+  <tr>
+    <th>ID</th>
+    <th scope="row">Nombre</th>
+    <th>Apellido</th>
+    <th>Dni </th>
+    <th>Direccion</th>
+    <th>Acciones</th>
+  </tr>
+
+  <tr>
+    <td>{{socio.id}}</td>
+    <td>{{socio.nombre}}</td>
+
+    <td>{{socio.apellido}}</td>
+
+    <td>{{socio.dni}}</td>
+    <td>{{socio.direccion}}</td>
+    <td>  
+      <a class="btn btn-primary" href="{% url 'socio_editar' socio.id %}">Editar</a>
+      <a class="btn btn-danger" href="{% url 'socio_eliminar' socio.id %}">Eliminar</a>
+    </td>
+
+
+  </tr>
+  {% endif %}
+
+</table>
+<p></p>
+<form method="get">
+    <select class="btn btn-primary" id="selectyear" name="select_year" >
+        <option  value="" selected="selected">Year</option>
+        {% for anio in anios %}
+         <option value="{{anio.anio}}"> {{anio.anio}} </option>
+        {% endfor %}
+      </select>
+    <button type="submit" class="btn btn-success">Buscar</button>
+    
+  </form>
+
+
+
+<h4>año actual: {{current_year}}</h4>
+<table class="tablasocios" >
+    {% if cuotas %}
+    <tr>
+      <th scope="row">Cuota N°</th>
+      <th>Mes</th>
+      <th>Paga</th>
+      <th>Fecha de pago </th>
+      <th>Año</th>
+      <th>Acciones</th>
+ 
+    </tr>
+    {% for cuota in cuotas %}
+    <tr>
+      <td>{{cuota.nrocuota}}</td>
+      <td>{{cuota.mes}}</td>
+      <td>{{cuota.pago}}</td>
+
+      {% if cuota.fecha_pago != None%}
+      <td> {{cuota.fecha_pago }}</td>
+      {% else %}
+      <td>-</td>
+      {% endif %}
+
+      <td>{{cuota.aniocuota}}</td>
+      <td>  
+        <a class="btn btn-primary" href="{% url 'cuota_view' cuota.id socio.id %}">Ver</a>
+      </td>
+  
+  
+    </tr>
+    {% endfor %}
+    {% endif %}
+  
+  </table>
+
+{% endblock %}
+{% load static %} 
+<link rel="stylesheet" href="{% static 'css/styles.css' %}">
+<link rel="stylesheet" href="{% static 'css/custom_select.css' %}">

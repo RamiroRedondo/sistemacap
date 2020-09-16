@@ -1,5 +1,5 @@
 from django import forms
-from .models import Socio
+from .models import Socio,Cuota
 from django.contrib.admin import widgets
 import datetime
 
@@ -44,5 +44,35 @@ class SocioForm(forms.ModelForm):
 			'mail': forms.TextInput(attrs={'class':'form-control'}),
 			'cbu': forms.TextInput(attrs={'class':'form-control'}),
 			'dar_baja': forms.TextInput(attrs={'class':'form-control'}),
+	
+		}
+
+class CuotaForm(forms.ModelForm):
+	class Meta:
+		model = Cuota
+
+		fields = [
+			'nrocuota',
+			'mes',
+			'pago',
+			'fecha_pago',
+			'aniocuota',
+			
+		]
+		labels = {
+			'nrocuota': 'Cuota numero:',
+			'mes': 'Mes',
+			'pago': 'Paga',
+			'fecha_pago': 'Fecha de pago',
+	
+		}
+		widgets = {
+			'nrocuota': forms.TextInput(attrs={'class':'form-control','readonly':'readonly'}),
+			'mes': forms.TextInput(attrs={'class':'form-control','readonly':'readonly'}),
+			'pago': forms.Select(attrs={'class':'form-control'}),
+			'fecha_pago': DateInput(),
+			'nrosocio': forms.TextInput(attrs={'class':'form-control'}),
+			'aniocuota': forms.TextInput(attrs={'class':'form-control','readonly':'readonly'}),
+		
 	
 		}
