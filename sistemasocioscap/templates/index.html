@@ -1,65 +1,10 @@
 {% extends "base_generic.html" %}
+{% block navbar %}
+{% endblock %}
+
 {% block content %}
-<h1>Sistema de socios - Home</h1>
-
-<h2>Index Principal CAP</h2>
-
-
-  <style>
-  table {
-    font-family: arial, sans-serif;
-    border-collapse: collapse;
-    width: 100%;
-  }
-
-  td, th {
-    border: 1px solid #dddddd;
-    text-align: left;
-    padding: 8px;
-  }
-
-tr:nth-child(even) {
-  background-color: #dddddd;
-}
-</style>
-<form method="get">
-  <input type="text" class="form-control" placeholder="Buscar..." name="buscar" value="{{ request.get.buscar }}">
-  <button type="submit" class="btn btn-success">Buscar</button>
-  
-</form>
-<table class="tablasocios" style="">
-  {% if socios %}
-  <tr>
-    <th>ID</th>
-    <th scope="row">Nombre</th>
-    <th>Apellido</th>
-    <th>Dni </th>
-    <th>Direccion</th>
-    <th>Acciones</th>
-  </tr>
-  {% for socio in socios %}
-  <tr>
-    <td>{{socio.id}}</td>
-    <td>{{socio.nombre}}</td>
-
-    <td>{{socio.apellido}}</td>
-
-    <td>{{socio.dni}}</td>
-    <td>{{socio.direccion}}</td>
-    <td>  
-      <a class="btn btn-primary" href="{% url 'socio_editar' socio.id %}">Editar</a>
-      <a class="btn btn-danger" href="{% url 'socio_eliminar' socio.id %}">Eliminar</a>
-    </td>
-
-
-  </tr>
-  {% endfor %}
-  {% else %}
-  <h4>No exisen registros de socios</h4>
-  {% endif %}
-
- 
-</table>
+<h1>INDEX </h1>
 {% endblock %}
 {% load static %} 
 <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+<link rel="stylesheet" href="{% static 'css/bootstrap.min..css' %}">

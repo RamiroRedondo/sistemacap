@@ -28,18 +28,17 @@ def index(request):
      context={'socios':socios},
 )
 def socios_listado(request):
-    """
-    Función vista para la página inicio del sitio.
-    """
-    # Genera contadores de algunos de los objetos principales
+
+    queryset = request.GET.get("buscar")
     socios = Socio.objects.all()
-    tot_socios= Socio.objects.all().count()
-    # Renderiza la plantilla HTML index.html con los datos en la variable contexto
-    return render(
-    request,
-    'socio_listado.html',
-     context={'tot_socios':tot_socios, 'socios':socios},
-)    
+    if queryset:
+        socios = Socio.objects.filter(
+            Q(nombre__icontains = queryset) |
+            Q(apellido__icontains = queryset)
+        ).distinct()
+
+    return render(request,'socio_listado.html', context={'socios':socios},
+)  
 
 def socio_view(request):
     if request.method == 'POST':

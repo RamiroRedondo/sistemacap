@@ -23,9 +23,13 @@ tr:nth-child(even) {
   background-color: #dddddd;
 }
 </style>
-
+<form method="get">
+  <input type="text" class="form-control" placeholder="Buscar..." name="buscar" value="{{ request.get.buscar }}">
+  <button type="submit" class="btn btn-success">Buscar</button>
+  
+</form>
 <table class="tablasocios" style="">
-  {% if object_list %}
+  {% if socios %}
   <tr>
     <th scope="row">Nombre</th>
     <th>Apellido</th>
@@ -33,7 +37,7 @@ tr:nth-child(even) {
     <th>Direccion</th>
     <th>Acciones</th>
   </tr>
-  {% for socio in object_list %}
+  {% for socio in socios %}
   <tr>
 
     <td>{{socio.nombre}}</td>

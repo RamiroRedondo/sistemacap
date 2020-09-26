@@ -18,24 +18,22 @@ from django.contrib import admin
 from django.views.generic import RedirectView
 from django.conf import settings
 from django.conf.urls.static import static
+from django.contrib.auth.views import LoginView, logout_then_login
 
 
 urlpatterns = [
 	
-url(r'^admin/', admin.site.urls),
-
-]
-urlpatterns += [
+    url(r'^admin/', admin.site.urls),
     url(r'^index/', include('sistemasocioscap.urls')),
-]
-urlpatterns += [
     url(r'^sistemasocioscap/', include('sistemasocioscap.urls')),
-]
-urlpatterns += [
-    url('', RedirectView.as_view(url='/index/', permanent=True)),
+    url(r'^accounts/login/', LoginView.as_view(template_name='login.html'), name="login"),
+    url(r'^logout/', logout_then_login, name='logout'),
 
 ]
+
+
 """
+###url('', RedirectView.as_view(url='/index/', permanent=True)),
 urlpatterns += [
     url(r'^index/', include('sistemasocioscap.urls')),
 ]
