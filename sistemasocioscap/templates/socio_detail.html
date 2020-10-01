@@ -93,6 +93,7 @@ tr:nth-child(even) {
       <td>{{cuota.aniocuota}}</td>
       <td>  
         <a class="btn btn-primary" href="{% url 'cuota_view' cuota.id socio.id %}">Ver</a>
+        <a class="btn btn-primary" href="{% url 'cuota_pagar' cuota.id socio.id %}">Pagar</a>
       </td>
   
   

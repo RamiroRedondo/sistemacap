@@ -1,13 +1,13 @@
 from django.conf.urls import url
 from django.views.generic.detail import DetailView
 from . import views
-from sistemasocioscap.views import SocioList, SocioCreate, SocioUpdate, SocioDelete
+from sistemasocioscap.views import SocioList, SocioCreate, SocioUpdate, SocioDelete, IndexListView
 from django.contrib.auth.decorators import login_required
 
 
 urlpatterns = [
 	
-	url(r'^$', login_required(views.index), name='index'),
+	url(r'^$', login_required(IndexListView.as_view()), name='index'),
 	url(r'^nuevo$', login_required(SocioCreate.as_view()), name='socio_crear'),
 	url(r'^listado$', login_required(views.socios_listado), name='listado_socios'),
 	url(r'^editar/(?P<pk>\d+)/$', login_required(SocioUpdate.as_view()), name='socio_editar'),
@@ -15,6 +15,7 @@ urlpatterns = [
 	url(r'^socio_detail/(?P<id_socio>\d+)/$', login_required(views.socio_detail), name='socio_detail'),
 	url(r'^socio_agregar$', login_required(views.socio_agregar), name='socio_agregar'),
 	url(r'^cuota_view/(?P<id_cuota>\d+)/(?P<id_socio>(\d+))/$', login_required(views.cuota_view), name='cuota_view'),
+	url(r'^cuota_pagar/(?P<id_cuota>\d+)/(?P<id_socio>(\d+))/$', login_required(views.cuota_pagar), name='cuota_pagar'),
 
 
 

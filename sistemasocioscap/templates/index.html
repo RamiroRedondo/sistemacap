@@ -1,10 +1,81 @@
 {% extends "base_generic.html" %}
-{% block navbar %}
-{% endblock %}
 
+  
 {% block content %}
-<h1>INDEX </h1>
+
+<h2>INDEX</h2>
+
+
+  <style>
+  table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+  }
+
+  td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+  }
+
+tr:nth-child(even) {
+  background-color: #dddddd;
+}
+</style>
+<form method="get">
+  <input type="text" class="form-control" placeholder="Buscar..." name="buscarindex" value="{{ request.get.buscar }}">
+  <button type="submit" class="btn btn-success">Buscar</button>
+  
+</form>
+<table class="tablasocios" style="">
+  {% if object_list %}
+  <tr>
+    <th scope="row">Nombre</th>
+    <th>Apellido</th>
+    <th>Dni </th>
+    <th>Direccion</th>
+    <th>Acciones</th>
+  </tr>
+  {% for socio in object_list %}
+  <tr>
+
+    <td>{{socio.nombre}}</td>
+
+    <td>{{socio.apellido}}</td>
+
+    <td>{{socio.dni}}</td>
+    <td>{{socio.direccion}}</td>
+    <td>
+    	<a class="btn btn-primary" href="{% url 'socio_editar' socio.id %}">Editar</a>
+      <a class="btn btn-danger" href="{% url 'socio_eliminar' socio.id %}">Eliminar</a>
+      <a class="btn btn-primary" href="{% url 'socio_detail' socio.id %}">Ver</a>
+      
+    </td>
+
+
+  </tr>
+  {% endfor %}
+  {% else %}
+  <h4>No exisen registros de socios</h4>
+  {% endif %}
+
+ 
+</table>
+<ul class="pager">
+    <li>
+        {% if page_obj.has_previous %}
+        <a href="?page={{ page_obj.previous_page_number }}">Anterior</a>
+        {% endif %}
+    </li>
+
+    <li>
+        {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}">Siguiente</a>
+        {% endif %}
+        
+    </li>
+</ul>
 {% endblock %}
 {% load static %} 
 <link rel="stylesheet" href="{% static 'css/styles.css' %}">
-<link rel="stylesheet" href="{% static 'css/bootstrap.min..css' %}">

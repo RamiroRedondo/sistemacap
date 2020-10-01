@@ -77,6 +77,21 @@ def socio_delete(request, id_socio):
         return redirect('listado_socios')
     return render (request, 'socio_delete.html',{'socio': socio})
 
+class IndexListView(ListView):
+    model = Socio
+    template_name = 'index.html'
+    paginate_by = 4
+
+    def get_queryset(self):
+        queryset = self.request.GET.get("buscarindex")
+        socios = Socio.objects.all()
+        if queryset:
+            socios = Socio.objects.filter(
+                Q(nombre__icontains = queryset) |
+                Q(apellido__icontains = queryset)
+        ).distinct()
+
+        return socios
 
 class SocioList(ListView):
     model = Socio
@@ -153,4 +168,15 @@ def cuota_view(request,id_cuota, id_socio):
         return redirect('socio_detail',id_socio = id_socio)
 
     return render(request, 'cuota_form.html',{'form': form})
+
+def cuota_pagar(request,id_cuota, id_socio):
+    cuota = Cuota.objects.get(id = id_cuota)
+    fecha = datetime.now()
+    cuota.pago = "si"
+    cuota.fecha_pago = fecha
+    cuota.save()
+    return redirect('socio_detail',id_socio = id_socio)
+
+
+
 
