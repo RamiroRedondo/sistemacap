@@ -9,6 +9,10 @@ from django.shortcuts import render, redirect
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from .forms import SocioForm, CuotaForm
 from django.db.models import Q
+from io import BytesIO
+from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import A4
+
 
 def index(request):
    
@@ -128,6 +132,8 @@ def socio_detail(request, id_socio):
     return render (request, 'socio_detail.html',{'socio':socio, 'cuotas':cuotas,'anios':anios,'current_year':current_year})
 
 def socio_agregar(request):
+    now = datetime.now()
+    current_year = now.year
     if request.method =='POST':
         form = SocioForm(request.POST)
         if form.is_valid():
@@ -135,20 +141,22 @@ def socio_agregar(request):
             #creo registro
             registro = RegistroPagos.objects.create(numeroregistro = socio.dni)
             #creo cuotas
-            c1 = Cuota.objects.create(nrocuota="1",mes= "Enero",pago= "no", aniocuota= "2020",registro = registro)
-            c2 = Cuota.objects.create(nrocuota="2",mes= "Febrero",pago= "no", aniocuota= "2020",registro = registro)
-            c3 = Cuota.objects.create(nrocuota="3",mes= "Marzo",pago= "no", aniocuota= "2020",registro = registro)
-            c4 = Cuota.objects.create(nrocuota="4",mes= "Abril",pago= "no", aniocuota= "2020",registro = registro)
-            c5 = Cuota.objects.create(nrocuota="5",mes= "Mayo",pago= "no", aniocuota= "2020",registro = registro)
-            c6 = Cuota.objects.create(nrocuota="6",mes= "Junio",pago= "no", aniocuota= "2020",registro = registro)
-            c7 = Cuota.objects.create(nrocuota="7",mes= "Julio",pago= "no", aniocuota= "2020",registro = registro)
-            c8 = Cuota.objects.create(nrocuota="8",mes= "Agosto",pago= "no", aniocuota= "2020",registro = registro)
-            c9 = Cuota.objects.create(nrocuota="9",mes= "Septiembre",pago= "no", aniocuota= "2020",registro = registro)
-            c10 = Cuota.objects.create(nrocuota="10",mes= "Octubre",pago= "no", aniocuota= "2020",registro = registro)
-            c11= Cuota.objects.create(nrocuota="11",mes= "Noviembre",pago= "no", aniocuota= "2020",registro = registro)
-            c12 = Cuota.objects.create(nrocuota="12",mes= "Diciembre",pago= "no", aniocuota= "2020",registro = registro)
+           
+            c1 = Cuota.objects.create(nrocuota="1",mes= "Enero",pago= "no", total= 500, aniocuota= current_year,registro = registro, socio = socio)
+            c2 = Cuota.objects.create(nrocuota="2",mes= "Febrero",pago= "no", total= 500,aniocuota= current_year,registro = registro, socio = socio)
+            c3 = Cuota.objects.create(nrocuota="3",mes= "Marzo",pago= "no",total= 500, aniocuota= current_year,registro = registro, socio = socio)
+            c4 = Cuota.objects.create(nrocuota="4",mes= "Abril",pago= "no",total= 500, aniocuota= current_year,registro = registro, socio = socio)
+            c5 = Cuota.objects.create(nrocuota="5",mes= "Mayo",pago= "no",total= 500, aniocuota= current_year,registro = registro, socio = socio)
+            c6 = Cuota.objects.create(nrocuota="6",mes= "Junio",pago= "no",total= 500, aniocuota= current_year,registro = registro, socio = socio)
+            c7 = Cuota.objects.create(nrocuota="7",mes= "Julio",pago= "no",total= 500, aniocuota= current_year,registro = registro, socio = socio)
+            c8 = Cuota.objects.create(nrocuota="8",mes= "Agosto",pago= "no",total= 500, aniocuota= current_year,registro = registro, socio = socio)
+            c9 = Cuota.objects.create(nrocuota="9",mes= "Septiembre",pago= "no",total= 500, aniocuota= current_year,registro = registro, socio = socio)
+            c10 = Cuota.objects.create(nrocuota="10",mes= "Octubre",pago= "no",total= 500, aniocuota= current_year,registro = registro, socio = socio)
+            c11= Cuota.objects.create(nrocuota="11",mes= "Noviembre",pago= "no",total= 500, aniocuota= current_year,registro = registro, socio = socio)
+            c12 = Cuota.objects.create(nrocuota="12",mes= "Diciembre",pago= "no",total= 500, aniocuota= current_year,registro = registro, socio = socio)
             socio.registro = registro
             socio.save()
+           
 
             return redirect('socio_detail',id_socio= socio.id)
     else:
@@ -177,6 +185,44 @@ def cuota_pagar(request,id_cuota, id_socio):
     cuota.save()
     return redirect('socio_detail',id_socio = id_socio)
 
+def cuotas_deuda(request):
 
+    cuotas = Cuota.objects.filter(pago='no')
+
+    return render(request, 'deudas.html',{'cuotas': cuotas})
+
+def reporte_cuota(request,id_cuota, id_socio):
+    cuota = Cuota.objects.get(id = id_cuota)
+    socio = Socio.objects.get(id = id_socio)
+
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attatchment; filename= Recibo-cuota.pdf'
+
+
+    buffer = BytesIO()
+    c= canvas.Canvas(buffer,pagesize=A4)
+
+    c.setLineWidth(.3)
+    c.setFont('Helvetica',22)
+    c.drawString(30,750, 'Club Atlético Pellegrini')
+   
+
+    c.setFont('Helvetica',12)
+    c.drawString(30,730, 'Alsina 70 6346 Pellegrini, Provincia de Buenos Aires, Argentina')
+
+    c.setFont('Helvetica',12)
+    c.drawString(30,700, 'Socio: ' + socio.nombre + ' ' + socio.apellido )
+    c.setFont('Helvetica',12)
+    c.drawString(30,680, 'Cuota: ' + cuota.nrocuota + '- Mes: ' + cuota.mes + ' ' + cuota.aniocuota)
+
+    c.setFont('Helvetica',12)
+    c.drawString(30,660, 'Total: ' + '$' + str(cuota.total) )
+    
+
+    c.save()
+    pdf = buffer.getvalue()
+    buffer.close()
+    response.write(pdf)
+    return response
 
 

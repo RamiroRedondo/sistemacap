@@ -19,39 +19,7 @@ tr:nth-child(even) {
   background-color: #dddddd;
 }
 </style>
-<h3>
-    Socio : {{ socio.nombre }} {{socio.apellido}}
-</h3>
-<h4>Registro de pago numero {{ socio.registro.numeroregistro }}</h4>
-<table class="tablasocios" style="text-align:center;">
-  {% if socio %}
-  <tr>
-    <th>ID</th>
-    <th scope="row">Nombre</th>
-    <th>Apellido</th>
-    <th>Dni </th>
-    <th>Direccion</th>
-    <th>Acciones</th>
-  </tr>
-
-  <tr>
-    <td>{{socio.id}}</td>
-    <td>{{socio.nombre}}</td>
-
-    <td>{{socio.apellido}}</td>
-
-    <td>{{socio.dni}}</td>
-    <td>{{socio.direccion}}</td>
-    <td>  
-      <a class="btn btn-primary" href="{% url 'socio_editar' socio.id %}">Editar</a>
-      <a class="btn btn-danger" href="{% url 'socio_eliminar' socio.id %}">Eliminar</a>
-    </td>
-
-
-  </tr>
-  {% endif %}
-
-</table>
+<h3>Deudas</h3>
 <p></p>
 <form method="get">
     <select class="btn btn-primary" id="selectyear" name="select_year" >
@@ -64,13 +32,12 @@ tr:nth-child(even) {
     
   </form>
 
-
-
-<h4>año actual: {{current_year}}</h4>
 <table class="tablasocios" >
     {% if cuotas %}
     <tr>
-      <th scope="row">Cuota N°</th>
+     <th scope="row">Apellido</th>
+      <th>Nombre</th>
+      <th>Cuota N°</th>
       <th>Mes</th>
       <th>Paga</th>
       <th>Fecha de pago </th>
@@ -81,6 +48,8 @@ tr:nth-child(even) {
     </tr>
     {% for cuota in cuotas %}
     <tr>
+      <td>{{cuota.socio.apellido}}</td>
+      <td>{{cuota.socio.nombre}}</td>
       <td>{{cuota.nrocuota}}</td>
       <td>{{cuota.mes}}</td>
       <td>{{cuota.pago}}</td>
@@ -93,9 +62,9 @@ tr:nth-child(even) {
       <td>{{cuota.total}}$</td>
       <td>{{cuota.aniocuota}}</td>
       <td>  
-        <a class="btn btn-primary" href="{% url 'cuota_view' cuota.id socio.id %}">Ver</a>
-        <a class="btn btn-primary" href="{% url 'cuota_pagar' cuota.id socio.id %}">Pagar</a>
-        <a class="btn btn-danger" href="{% url 'reporte_cuota' cuota.id socio.id %}">PDF</a>
+        <a class="btn btn-primary" href="">Ver</a>
+        <a class="btn btn-primary" href="">Pagar</a>
+        <a class="btn btn-danger" href="">PDF</a>
       </td>
   
   

@@ -30,7 +30,10 @@ urlpatterns = [
     url(r'^logout/', logout_then_login, name='logout'),
 
 ]
+urlpatterns += [
+    url('', RedirectView.as_view(url='/index/', permanent=True)),
 
+]
 
 """
 ###url('', RedirectView.as_view(url='/index/', permanent=True)),

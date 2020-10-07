@@ -19,7 +19,7 @@ class SocioForm(forms.ModelForm):
 			'direccion',
 			'mail',
 			'cbu',
-			'dar_baja',
+			
 		
 		]
 		labels = {
@@ -31,7 +31,7 @@ class SocioForm(forms.ModelForm):
 			'direccion':'Direccion',
 			'mail': 'E-Mail',
 			'cbu':'CBU',
-			'dar_baja': 'Dar de baja',
+		
 		
 		}
 		widgets = {
@@ -43,7 +43,7 @@ class SocioForm(forms.ModelForm):
 			'direccion': forms.TextInput(attrs={'class':'form-control'}),
 			'mail': forms.TextInput(attrs={'class':'form-control'}),
 			'cbu': forms.TextInput(attrs={'class':'form-control'}),
-			'dar_baja': forms.TextInput(attrs={'class':'form-control'}),
+		
 	
 		}
 
@@ -56,6 +56,7 @@ class CuotaForm(forms.ModelForm):
 			'mes',
 			'pago',
 			'fecha_pago',
+			'total',
 			'aniocuota',
 			
 		]
@@ -64,7 +65,9 @@ class CuotaForm(forms.ModelForm):
 			'mes': 'Mes',
 			'pago': 'Paga',
 			'fecha_pago': 'Fecha de pago',
-	
+			'total':'Total ($)',
+			'anio_cuota':'Year'
+
 		}
 		widgets = {
 			'nrocuota': forms.TextInput(attrs={'class':'form-control','readonly':'readonly'}),
@@ -72,6 +75,7 @@ class CuotaForm(forms.ModelForm):
 			'pago': forms.Select(attrs={'class':'form-control'}),
 			'fecha_pago': DateInput(),
 			'nrosocio': forms.TextInput(attrs={'class':'form-control'}),
+			'total': forms.TextInput(attrs={'class':'form-control','readonly':'readonly'}),
 			'aniocuota': forms.TextInput(attrs={'class':'form-control','readonly':'readonly'}),
 		
 	

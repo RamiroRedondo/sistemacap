@@ -16,20 +16,6 @@ class RegistroPagos (models.Model):
   	def get_absolute_url(self):
     		return reverse ('RegistroPagos-detail', args=[str(self.id)])
 
-class Cuota(models.Model):
-	"""docstring for Cuota"""
-	nrocuota = models.CharField (max_length = 200)
-	mes = models.CharField (max_length = 200, null=True, blank=True)
-	pago = models.CharField(max_length=32,choices=[('si', 'Si'),('no', 'No')], default="",null = True, blank=True)
-	fecha_pago = models.DateField(null=True, blank=True)
-	aniocuota = models.CharField (max_length = 200,null=True, blank=True)
-	registro = models.ForeignKey('RegistroPagos', on_delete=models.SET_NULL, null=True, blank=True)
-	# ForeignKey, ya que una cuota tiene un solo registro, pero el mismo registro puede tener muchas cuotas.
-	def __str__(self):
-    		return self.nrocuota
-  	def get_absolute_url(self):
-    		return reverse ('cuota-detail', args=[str(self.id)])
-
 class Socio (models.Model):
 
 	dni = models.IntegerField ()
@@ -46,8 +32,27 @@ class Socio (models.Model):
   	def get_absolute_url(self):
     		return reverse ('socio-detail', args=[str(self.id)])
 
+class Cuota(models.Model):
+	"""docstring for Cuota"""
+	nrocuota = models.CharField (max_length = 200)
+	mes = models.CharField (max_length = 200, null=True, blank=True)
+	pago = models.CharField(max_length=32,choices=[('si', 'Si'),('no', 'No')], default="",null = True, blank=True)
+	fecha_pago = models.DateField(null=True, blank=True)
+	total = models.IntegerField (null=True)
+	aniocuota = models.CharField (max_length = 200,null=True, blank=True)
+	registro = models.ForeignKey('RegistroPagos', on_delete=models.SET_NULL, null=True, blank=True)
+	socio = models.ForeignKey('Socio', on_delete=models.SET_NULL, null=True, blank=True)
+	# ForeignKey, ya que una cuota tiene un solo registro, pero el mismo registro puede tener muchas cuotas.
+	def __str__(self):
+    		return self.nrocuota
+  	def get_absolute_url(self):
+    		return reverse ('cuota-detail', args=[str(self.id)])
+
+
+
 class Anio(models.Model):
 	anio = models.CharField(max_length = 200)
+	monto_cuota = models.IntegerField (null=True)
 
 """
 @receiver(post_save, sender = Socio)
