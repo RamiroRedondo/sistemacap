@@ -3,7 +3,7 @@
   
 {% block content %}
 
-<h2>Listado de socios</h2>
+<h2>Listado de socios <a class="btn btn-primary" href="{% url 'reporte_socios_pdf' %}"><span class="glyphicon glyphicon-file"></span></a> </h2>
 
 
   <style>
@@ -23,11 +23,13 @@ tr:nth-child(even) {
   background-color: #dddddd;
 }
 </style>
+ 
 <form method="get">
   <input type="text" class="form-control" placeholder="Buscar..." name="buscar" value="{{ request.get.buscar }}">
   <button type="submit" class="btn btn-success">Buscar</button>
   
 </form>
+                                                
 <table class="tablasocios" style="">
   {% if socios %}
   <tr>

@@ -6,12 +6,17 @@ from django.template import loader, Context
 from .models import Socio, RegistroPagos, Cuota, Anio
 from django.core.urlresolvers import reverse_lazy
 from django.shortcuts import render, redirect
-from django.views.generic import ListView, CreateView, UpdateView, DeleteView
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView, View
 from .forms import SocioForm, CuotaForm
 from django.db.models import Q
 from io import BytesIO
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import A4
+from django.conf import settings
+from reportlab.lib.utils import ImageReader
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle
+from reportlab.lib.units import cm
+from reportlab.lib import colors
 
 
 def index(request):
@@ -225,4 +230,56 @@ def reporte_cuota(request,id_cuota, id_socio):
     response.write(pdf)
     return response
 
+class ReporteSociosPDF(View):  
+     
+    def cabecera(self,pdf):
+        #Utilizamos el archivo logo_django.png que está guardado en la carpeta media/imagenes
+        logo = ImageReader('https://i.pinimg.com/564x/21/b4/86/21b486d3cff802856f0db300de1723a9.jpg')
+        #Definimos el tamaño de la imagen a cargar y las coordenadas correspondientes
+        pdf.drawImage(logo, 40, 750, 120, 90,preserveAspectRatio=True)                
+         
+    def get(self, request, *args, **kwargs):
+        #Indicamos el tipo de contenido a devolver, en este caso un pdf
+        response = HttpResponse(content_type='application/pdf')
+        #La clase io.BytesIO permite tratar un array de bytes como un fichero binario, se utiliza como almacenamiento temporal
+        buffer = BytesIO()
+        #Canvas nos permite hacer el reporte con coordenadas X y Y
+        pdf = canvas.Canvas(buffer)
+        #Llamo al método cabecera donde están definidos los datos que aparecen en la cabecera del reporte.
+        self.cabecera(pdf)
+        pdf.setFont("Helvetica", 16)
+#Dibujamos una cadena en la ubicación X,Y especificada
+        pdf.drawString(200, 790, u"Club Atlético Pellegrini - Listado de socios")
+        pdf.setFont("Helvetica", 14)
+        y = 600
+        self.tabla(pdf, y)
+        #Con show page hacemos un corte de página para pasar a la siguiente
+        pdf.showPage()
+        pdf.save()
+        pdf = buffer.getvalue()
+        buffer.close()
+        response.write(pdf)
+        return response
 
+    def tabla(self,pdf,y):
+        #Creamos una tupla de encabezados para neustra tabla
+        encabezados = ('Nro de socio', 'Nombre', 'Apellido', 'DNI', 'Dirección')
+        #Creamos una lista de tuplas que van a contener a las personas
+        detalles = [(socio.nrosocio, socio.nombre, socio.apellido, socio.dni, socio.direccion) for socio in Socio.objects.all()]
+        #Establecemos el tamaño de cada una de las columnas de la tabla
+        detalle_orden = Table([encabezados] + detalles, colWidths=[2 * cm, 3 * cm, 3 * cm,2 * cm ,  6 * cm])
+        #Aplicamos estilos a las celdas de la tabla
+        detalle_orden.setStyle(TableStyle(
+            [
+                #La primera fila(encabezados) va a estar centrada
+                ('ALIGN',(0,0),(3,0),'CENTER'),
+                #Los bordes de todas las celdas serán de color negro y con un grosor de 1
+                ('GRID', (0, 0), (-1, -1), 1, colors.black), 
+                #El tamaño de las letras de cada una de las celdas será de 10
+                ('FONTSIZE', (0, 0), (-1, -1), 10),
+            ]
+        ))
+        #Establecemos el tamaño de la hoja que ocupará la tabla 
+        detalle_orden.wrapOn(pdf, 800, 600)
+        #Definimos la coordenada donde se dibujará la tabla
+        detalle_orden.drawOn(pdf, 60,y)

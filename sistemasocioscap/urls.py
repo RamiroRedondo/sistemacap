@@ -1,7 +1,7 @@
 from django.conf.urls import url
 from django.views.generic.detail import DetailView
 from . import views
-from sistemasocioscap.views import SocioList, SocioCreate, SocioUpdate, SocioDelete, IndexListView
+from sistemasocioscap.views import SocioList, SocioCreate, SocioUpdate, SocioDelete, IndexListView, ReporteSociosPDF
 from django.contrib.auth.decorators import login_required
 
 
@@ -18,7 +18,7 @@ urlpatterns = [
 	url(r'^cuota_view/(?P<id_cuota>\d+)/(?P<id_socio>(\d+))/$', login_required(views.cuota_view), name='cuota_view'),
 	url(r'^cuota_pagar/(?P<id_cuota>\d+)/(?P<id_socio>(\d+))/$', login_required(views.cuota_pagar), name='cuota_pagar'),
 	url(r'^reporte_cuota/(?P<id_cuota>\d+)/(?P<id_socio>(\d+))/$', login_required(views.reporte_cuota), name='reporte_cuota'),
-
+	url(r'^reporte_socios_pdf/$',login_required(ReporteSociosPDF.as_view()), name="reporte_socios_pdf")
 
 	#url(r'^listado$', views.socios_listado, name='listado_socios'),
 	  
