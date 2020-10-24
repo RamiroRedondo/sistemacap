@@ -130,10 +130,9 @@ def socio_detail(request, id_socio):
     cuotas = Cuota.objects.filter(registro = socio.registro,aniocuota = current_year)
     anios = Anio.objects.all()
     queryset = request.GET.get("select_year")
+  
     if queryset:
-        cuotas = Cuota.objects.filter(
-            Q(aniocuota__icontains = queryset),registro = socio.registro
-        )
+        cuotas = Cuota.objects.filter(aniocuota__icontains = queryset, socio= socio)
     return render (request, 'socio_detail.html',{'socio':socio, 'cuotas':cuotas,'anios':anios,'current_year':current_year})
 
 def socio_agregar(request):
