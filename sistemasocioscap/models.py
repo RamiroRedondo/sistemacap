@@ -16,18 +16,28 @@ class RegistroPagos (models.Model):
   	def get_absolute_url(self):
     		return reverse ('RegistroPagos-detail', args=[str(self.id)])
 
-class Socio (models.Model):
+class Cobrador (models.Model):
+	dni = models.IntegerField()
+	nombre = models.CharField(max_length= 200)
+	apellido = models.CharField (max_length = 200)
 
+	def __str__(self):
+    		return self.nombre
+  	def get_absolute_url(self):
+    		return reverse ('cobrador-detail', args=[str(self.id)])
+	
+class Socio (models.Model):
 	dni = models.IntegerField ()
-	nombre = models.CharField(max_length= 200, help_text="Ingrese el nombre del usuario")
+	nombre = models.CharField(max_length= 200)
 	apellido = models.CharField (max_length = 200)
 	fecha_nacimiento = models.DateField(null = True, blank=True)
-	nrosocio = models.IntegerField ()
+	nrosocio = models.IntegerField(null = True, blank=True)
 	direccion = models.CharField (max_length = 200)
 	mail = models.EmailField(max_length=254, null=True)
 	cbu = models.IntegerField (null=True)
 	dar_baja = models.CharField(max_length=32,choices=[('si', 'Si'),('no', 'No')], default="",null = True, blank=True)
 	registro = models.OneToOneField(RegistroPagos, on_delete=models.SET_NULL, null = True, blank=True)
+	cobrador = models.ForeignKey(Cobrador, on_delete=models.SET_NULL, null = True, blank=True)
 	#anioocuota = models.ManyToManyField(Anual, help_text="Año cuota")
   	def get_absolute_url(self):
     		return reverse ('socio-detail', args=[str(self.id)])

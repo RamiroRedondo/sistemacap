@@ -9,7 +9,7 @@ from .models import Socio
 from .models import Cuota
 from .models import RegistroPagos
 from .models import Anio
-
+from .models import Cobrador
 #admin.site.register(Poll)
 #admin.site.register(Choice)
 #admin.site.register(Socio)
@@ -23,6 +23,7 @@ admin.site.register(Socio, SocioAdmin)
 admin.site.register(Cuota)
 admin.site.register(RegistroPagos)
 admin.site.register(Anio)
+admin.site.register(Cobrador)
 """admin.site.register(Socio, SocioAdmin)
 admin.site.register(Anual)
 admin.site.register(Cuota)

@@ -1,11 +1,35 @@
 from django import forms
-from .models import Socio,Cuota
+from .models import Socio,Cuota, Cobrador
 from django.contrib.admin import widgets
 import datetime
 
 class DateInput(forms.DateInput):
     input_type = 'date'
-    
+
+class CobradorForm(forms.ModelForm):
+	class Meta:
+		model = Cobrador
+
+		fields = [
+			'nombre',
+			'apellido',
+			'dni',
+		
+		
+		]
+		labels = {
+			'nombre': 'Nombre',
+			'apellido': 'Apellido',
+			'dni': 'Documento',
+		
+		}
+		widgets = {
+			'nombre': forms.TextInput(attrs={'class':'form-control'}),
+			'apellido': forms.TextInput(attrs={'class':'form-control'}),
+			'dni': forms.TextInput(attrs={'class':'form-control'}),
+
+		
+		}
 class SocioForm(forms.ModelForm):
 	class Meta:
 		model = Socio
@@ -19,6 +43,7 @@ class SocioForm(forms.ModelForm):
 			'direccion',
 			'mail',
 			'cbu',
+			'cobrador',
 			
 		
 		]
@@ -31,6 +56,7 @@ class SocioForm(forms.ModelForm):
 			'direccion':'Direccion',
 			'mail': 'E-Mail',
 			'cbu':'CBU',
+			'cobrador': 'Cobrador',
 		
 		
 		}
@@ -43,8 +69,8 @@ class SocioForm(forms.ModelForm):
 			'direccion': forms.TextInput(attrs={'class':'form-control'}),
 			'mail': forms.TextInput(attrs={'class':'form-control'}),
 			'cbu': forms.TextInput(attrs={'class':'form-control'}),
+			'cobrador': forms.Select(attrs={'class':'form-control'}),
 		
-	
 		}
 
 class CuotaForm(forms.ModelForm):
