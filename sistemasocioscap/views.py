@@ -7,7 +7,7 @@ from .models import Socio, RegistroPagos, Cuota, Anio, Cobrador
 from django.core.urlresolvers import reverse_lazy
 from django.shortcuts import render, redirect
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView, View
-from .forms import SocioForm, CuotaForm, CobradorForm
+from .forms import SocioForm, CuotaForm, CobradorForm, AnioForm
 from django.db.models import Q
 from io import BytesIO
 from reportlab.pdfgen import canvas
@@ -154,6 +154,8 @@ def socio_detail(request, id_socio):
 def socio_agregar(request):
     now = datetime.now()
     current_year = now.year
+    year = Anio.objects.get(anio = current_year)
+    monto = year.monto_cuota
     if request.method =='POST':
         form = SocioForm(request.POST)
         if form.is_valid():
@@ -165,9 +167,10 @@ def socio_agregar(request):
             meses = {'Enero': 1, 'Febrero': 2, 'Marzo': 3, 'Abril':4, 'Mayo':5, 'Junio':6, 'Julio':7, 'Agosto':8, 'Septiembre':9,'Octubre':10, 'Noviembre':11, 'Diciembre':12 }
         
             for mes in meses:
-                Cuota.objects.create(nrocuota=meses[mes],mes= mes,pago= "no", total= 500, aniocuota= current_year,registro = registro, socio = socio)
+                Cuota.objects.create(nrocuota=meses[mes],mes= mes,pago= "no", total= monto, aniocuota= current_year,registro = registro, socio = socio)
              
             socio.registro = registro
+            socio.dar_baja = "No"
             socio.save()
            
 
@@ -205,6 +208,43 @@ class CobradorDelete(DeleteView):
     model = Cobrador
     template_name = 'cobrador_delete.html'
     success_url = reverse_lazy('listado_cobrador')
+
+##AÑO
+class AnioList(ListView):
+    model = Anio
+    template_name = 'anio_listado.html'
+
+class AnioCreate(CreateView):
+    model = Anio
+    form_class = AnioForm
+    template_name = 'anio_form.html'
+    success_url = reverse_lazy('listado_anio')
+
+    def form_valid(self, form):
+        year = form.instance.anio
+        monto= form.instance.monto_cuota
+        
+        socios = Socio.objects.all()
+
+        for socio in socios:
+            meses = {'Enero': 1, 'Febrero': 2, 'Marzo': 3, 'Abril':4, 'Mayo':5, 'Junio':6, 'Julio':7, 'Agosto':8, 'Septiembre':9,'Octubre':10, 'Noviembre':11, 'Diciembre':12 }
+            registro = socio.registro
+            for mes in meses:     
+                Cuota.objects.create(nrocuota=meses[mes],mes= mes,pago= "no", total= monto, aniocuota= year,registro = registro, socio = socio)
+
+        return super(AnioCreate, self).form_valid(form)
+
+class AnioUpdate(UpdateView):
+    model = Anio
+    form_class = AnioForm
+    template_name = 'anio_form.html'
+    success_url = reverse_lazy('listado_anio')
+
+class AnioDelete(DeleteView):
+    model = Anio
+    template_name = 'anio_delete.html'
+    success_url = reverse_lazy('listado_anio')
+
 ## CUOTA
 def cuota_view(request,id_cuota, id_socio):
     cuota = Cuota.objects.get(id = id_cuota)

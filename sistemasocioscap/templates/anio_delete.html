@@ -1,0 +1,12 @@
+{% extends "base_generic.html" %}
+{% block content %}
+
+<form method="post">
+	{% csrf_token %}
+	<h3>¿Desea eliminar el registro de año {{object.anio}} ?</h3>
+
+	<button class="btn btn-danger"type="submit">Si, ELIMINAR</button>
+	<a class="btn btn-default" href="{% url 'listado_anio' %}">Cancelar</a>
+
+</form>
+{% endblock %}

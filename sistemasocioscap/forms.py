@@ -1,5 +1,5 @@
 from django import forms
-from .models import Socio,Cuota, Cobrador
+from .models import Socio,Cuota, Cobrador, Anio
 from django.contrib.admin import widgets
 import datetime
 
@@ -105,4 +105,25 @@ class CuotaForm(forms.ModelForm):
 			'aniocuota': forms.TextInput(attrs={'class':'form-control','readonly':'readonly'}),
 		
 	
+		}
+
+class AnioForm(forms.ModelForm):
+	class Meta:
+		model = Anio
+
+		fields = [
+			'anio',
+			'monto_cuota',
+	
+		]
+		labels = {
+			'anio': 'Year',
+			'monto_cuota': 'Monto cuota',
+
+	
+		}
+		widgets = {
+			'anio': forms.TextInput(attrs={'class':'form-control'}),
+			'monto_cuota': forms.TextInput(attrs={'class':'form-control'}),
+		
 		}

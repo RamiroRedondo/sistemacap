@@ -1,7 +1,7 @@
 from django.conf.urls import url
 from django.views.generic.detail import DetailView
 from . import views
-from sistemasocioscap.views import SocioList, SocioCreate, SocioUpdate, SocioDelete, IndexListView, ReporteSociosPDF, CobradorCreate, CobradorList, CobradorUpdate, CobradorDelete
+from sistemasocioscap.views import SocioList, SocioCreate, SocioUpdate, SocioDelete, IndexListView, ReporteSociosPDF, CobradorCreate, CobradorList, CobradorUpdate, CobradorDelete, AnioCreate, AnioUpdate, AnioList, AnioDelete
 from django.contrib.auth.decorators import login_required
 
 
@@ -20,10 +20,17 @@ urlpatterns = [
 	url(r'^cuota_pagar/(?P<id_cuota>\d+)/(?P<id_socio>(\d+))/$', login_required(views.cuota_pagar), name='cuota_pagar'),
 	url(r'^reporte_cuota/(?P<id_cuota>\d+)/(?P<id_socio>(\d+))/$', login_required(views.reporte_cuota), name='reporte_cuota'),
 	url(r'^reporte_socios_pdf/$',login_required(ReporteSociosPDF.as_view()), name="reporte_socios_pdf"),
+	#cobrador
 	url(r'^nuevocobrador$', login_required(CobradorCreate.as_view()), name='cobrador_crear'),
 	url(r'^listadocobradores$', login_required(CobradorList.as_view()), name='listado_cobrador'),
 	url(r'^eliminarcobrador/(?P<pk>\d+)/$', login_required(CobradorDelete.as_view()), name='cobrador_eliminar'),
 	url(r'^editarcobrador/(?P<pk>\d+)/$', login_required(CobradorUpdate.as_view()), name='cobrador_editar'),
+	#anio
+	url(r'^nuevoanio$', login_required(AnioCreate.as_view()), name='anio_crear'),
+	url(r'^listadoanio$', login_required(AnioList.as_view()), name='listado_anio'),
+	url(r'^eliminaranio/(?P<pk>\d+)/$', login_required(AnioDelete.as_view()), name='anio_eliminar'),
+	url(r'^editaranio/(?P<pk>\d+)/$', login_required(AnioUpdate.as_view()), name='anio_editar'),
+	
 
 
 	#url(r'^listado$', views.socios_listado, name='listado_socios'),

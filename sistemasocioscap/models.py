@@ -35,9 +35,10 @@ class Socio (models.Model):
 	direccion = models.CharField (max_length = 200)
 	mail = models.EmailField(max_length=254, null=True)
 	cbu = models.IntegerField (null=True)
-	dar_baja = models.CharField(max_length=32,choices=[('si', 'Si'),('no', 'No')], default="",null = True, blank=True)
+	dar_baja = models.CharField(max_length=32,choices=[('si', 'Si'),('no', 'No')],null = True, blank=True)
 	registro = models.OneToOneField(RegistroPagos, on_delete=models.SET_NULL, null = True, blank=True)
 	cobrador = models.ForeignKey(Cobrador, on_delete=models.SET_NULL, null = True, blank=True)
+	
 	#anioocuota = models.ManyToManyField(Anual, help_text="Año cuota")
   	def get_absolute_url(self):
     		return reverse ('socio-detail', args=[str(self.id)])

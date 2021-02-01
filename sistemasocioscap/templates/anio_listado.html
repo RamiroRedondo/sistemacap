@@ -1,0 +1,59 @@
+{% extends "base_generic.html" %}
+{% block content %}
+<h2>Listado de años</h2>
+  <style>
+  table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+  }
+
+  td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+  }
+
+tr:nth-child(even) {
+  background-color: #dddddd;
+}
+</style>
+<p></p>
+<a class="btn btn-primary" href="{% url 'anio_crear'%}">+ Agregar año </a>
+<p></p>
+
+                                                
+<table class="tablasocios" style="">
+  {% if object_list %}
+  <tr>
+    <th scope="row">Año</th>
+    <th>Monto cuota</th>
+  
+
+  </tr>
+  {% for anio in object_list %}
+  <tr>
+
+    <td>{{anio.anio}}</td>
+
+    <td>{{anio.monto_cuota}}</td>
+
+
+    <td>
+    <a class="btn btn-primary" href="{% url 'anio_editar' anio.id %}">Editar</a>
+    <a class="btn btn-danger" href="{% url 'anio_eliminar' anio.id %}">Eliminar</a>
+
+    </td>
+
+
+  </tr>
+  {% endfor %}
+  {% else %}
+  <h4>No exisen registros de anio</h4>
+  {% endif %}
+
+ 
+</table>
+{% endblock %}
+{% load static %} 
+<link rel="stylesheet" href="{% static 'css/styles.css' %}">

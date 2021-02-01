@@ -53,6 +53,7 @@ tr:nth-child(even) {
 
 </table>
 <p></p>
+<h4>Año actual: {{current_year}}  <a class="btn btn-primary" href="">Pago año completo</a></h4>
 <form method="get">
     <select class="btn btn-primary" id="selectyear" name="select_year" >
         <option  value="" selected="selected">Seleccionar año</option>
@@ -64,9 +65,6 @@ tr:nth-child(even) {
     
   </form>
 
-
-
-<h4>Año actual: {{current_year}}</h4>
 <table class="tablasocios" >
     {% if cuotas %}
     <tr>
