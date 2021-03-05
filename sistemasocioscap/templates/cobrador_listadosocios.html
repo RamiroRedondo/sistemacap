@@ -1,0 +1,60 @@
+{% extends "base_generic.html" %}
+
+  
+{% block content %}
+
+<h2>Listado de socios del cobrador: {{cobrador.nombre}} {{cobrador.apellido}} <a class="btn btn-primary" href=""><span class="glyphicon glyphicon-file"></span></a> </h2>
+
+
+  <style>
+  table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+  }
+
+  td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+  }
+
+tr:nth-child(even) {
+  background-color: #dddddd;
+}
+</style>
+ 
+
+                                                
+<table class="tablasocios" style="">
+  {% if socios %}
+  <tr>
+    <th scope="row">Nombre</th>
+    <th>Apellido</th>
+    <th>Dni </th>
+    <th>Direccion</th>
+  
+  </tr>
+  {% for socio in socios %}
+  <tr>
+
+    <td>{{socio.nombre}}</td>
+
+    <td>{{socio.apellido}}</td>
+
+    <td>{{socio.dni}}</td>
+    <td>{{socio.direccion}}</td>
+ 
+
+
+  </tr>
+  {% endfor %}
+  {% else %}
+  <h4>No exisen registros de socios</h4>
+  {% endif %}
+
+ 
+</table>
+{% endblock %}
+{% load static %} 
+<link rel="stylesheet" href="{% static 'css/styles.css' %}">

@@ -1,6 +1,11 @@
 {% extends "base_generic.html" %}
+
+  
 {% block content %}
-<h2>Listado de cobradores</h2>
+
+<h2>Listado de socios dados de baja<a class="btn btn-primary" href=""><span class="glyphicon glyphicon-file"></span></a> </h2>
+
+
   <style>
   table {
     font-family: arial, sans-serif;
@@ -18,9 +23,7 @@ tr:nth-child(even) {
   background-color: #dddddd;
 }
 </style>
-<p></p>
-<a class="btn btn-primary" href="{% url 'cobrador_crear'%}">+ Agregar Cobrador </a>
-<p></p>
+ 
 <form method="get">
   <input type="text" class="form-control" placeholder="Buscar..." name="buscar" value="{{ request.get.buscar }}">
   <button type="submit" class="btn btn-success">Buscar</button>
@@ -33,31 +36,33 @@ tr:nth-child(even) {
     <th scope="row">Nombre</th>
     <th>Apellido</th>
     <th>Dni </th>
-    <th>Acciones </th>
-
+    <th>Direccion</th>
+    <th>Baja</th>
+    <th>Acciones</th>
   </tr>
-  {% for cobrador in object_list %}
+  {% for socio in object_list %}
   <tr>
 
-    <td>{{cobrador.nombre}}</td>
+    <td>{{socio.nombre}}</td>
 
-    <td>{{cobrador.apellido}}</td>
+    <td>{{socio.apellido}}</td>
 
-    <td>{{cobrador.dni}}</td>
-
+    <td>{{socio.dni}}</td>
+    <td>{{socio.direccion}}</td>
+    <td>{{socio.dar_baja}}</td>
     <td>
-    <a class="btn btn-primary" href="{% url 'cobrador_listadosocios' cobrador.id %}">Listado de socios a cargo</a>
-    <a class="btn btn-primary" href="{% url 'reporte_cobrador_pdf' cobrador.id %}">Reporte pdf</a>
-    <a class="btn btn-primary" href="{% url 'cobrador_editar' cobrador.id %}">Editar</a>
-    <a class="btn btn-danger" href="{% url 'cobrador_eliminar' cobrador.id %}">Eliminar</a>
-
+      <a class="btn btn-primary" href="{% url 'socio_detail' socio.id %}">Registro de pago</a>
+    	<a class="btn btn-primary" href="{% url 'socio_editar' socio.id %}">Editar</a>
+      <a class="btn btn-danger" href="{% url 'socio_eliminar' socio.id %}">Eliminar</a>
+      <a class="btn btn-danger"  href="{% url 'socio_alta' socio.id %}">Dar de alta</a>
+      
     </td>
 
 
   </tr>
   {% endfor %}
   {% else %}
-  <h4>No exisen registros de cobradores</h4>
+  <h4>No exisen registros de socios</h4>
   {% endif %}
 
  

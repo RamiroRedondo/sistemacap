@@ -6,7 +6,7 @@
 <body>
 <p></p>
 
-<h2>Panel de administración</h2>
+<h2>Actualizar cuota</h2>
 
 
 <style>
@@ -30,10 +30,9 @@ tr:nth-child(even) {
 <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 
 <div class="list-group">
+{% %}
   <a href="{% url 'listado_cobrador' %}" class="list-group-item list-group-item-action list-group-item-info">Cobradores</a>
-  <a href="{% url 'anio_crear' %}" class="list-group-item list-group-item-action list-group-item-primary">Agregar año</a>
-  <a href="{% url 'listado_anio' %}" class="list-group-item list-group-item-action list-group-item-info">Actualizar monto de cuota</a>
-  <a href="{% url 'listado_sociosbaja' %}" class="list-group-item list-group-item-action list-group-item-primary">Socios dados de baja</a>
+  
 </div>
 
 {% endblock %}

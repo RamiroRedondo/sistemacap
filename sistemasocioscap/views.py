@@ -17,6 +17,12 @@ from reportlab.lib.utils import ImageReader
 from reportlab.platypus import SimpleDocTemplate, Table, TableStyle
 from reportlab.lib.units import cm
 from reportlab.lib import colors
+#pdf
+from django.template.loader import render_to_string
+from django.views.decorators.cache import cache_page
+from django.utils.decorators import method_decorator
+from django.core.files.storage import FileSystemStorage
+from weasyprint import HTML
 
 
 def index(request):
@@ -109,9 +115,9 @@ class SocioList(ListView):
 
     def get_queryset(self):
         queryset = self.request.GET.get("buscar")
-        socios = Socio.objects.all()
+        socios = Socio.objects.filter(dar_baja="no")
         if queryset:
-            socios = Socio.objects.filter(
+            socios = Socio.objects.filter(Q(dar_baja= "no"),
                 Q(nombre__icontains = queryset) |
                 Q(apellido__icontains = queryset)
         ).distinct()
@@ -134,6 +140,46 @@ class SocioDelete(DeleteView):
     model = Socio
     template_name = 'socio_delete.html'
     success_url = reverse_lazy('listado_socios')
+
+class SociosBajaList(ListView):
+    model = Socio
+    template_name = 'sociosbaja_listado.html'
+
+    def get_queryset(self):
+        queryset = self.request.GET.get("buscar")
+        socios = Socio.objects.filter(dar_baja="si")
+        if queryset:
+            socios = Socio.objects.filter(Q(dar_baja= "si"),
+                Q(nombre__icontains = queryset) |
+                Q(apellido__icontains = queryset)
+        ).distinct()
+
+        return socios
+
+def socio_baja(request, id_socio):
+
+    socio= Socio.objects.get(id=id_socio)
+    return render (request, 'socio_baja.html',{'socio':socio})
+
+def socio_alta(request, id_socio):
+
+    socio= Socio.objects.get(id=id_socio)
+    return render (request, 'socio_alta.html',{'socio':socio})
+
+def socio_darbaja(request,id_socio):
+
+    socio= Socio.objects.get(id=id_socio)
+    socio.dar_baja = "si"
+    socio.save()
+    return redirect ('listado_socios')
+
+def socio_daralta(request,id_socio):
+
+    socio= Socio.objects.get(id=id_socio)
+    socio.dar_baja = "no"
+    socio.save()
+    return redirect ('listado_socios')
+    
 
 def socio_detail(request, id_socio):
     now = datetime.now()
@@ -170,7 +216,7 @@ def socio_agregar(request):
                 Cuota.objects.create(nrocuota=meses[mes],mes= mes,pago= "no", total= monto, aniocuota= current_year,registro = registro, socio = socio)
              
             socio.registro = registro
-            socio.dar_baja = "No"
+            socio.dar_baja = "no"
             socio.save()
            
 
@@ -209,6 +255,13 @@ class CobradorDelete(DeleteView):
     template_name = 'cobrador_delete.html'
     success_url = reverse_lazy('listado_cobrador')
 
+def cobradorSociosList(request, id_cobrador):
+     
+    cobrador = Cobrador.objects.get(id=id_cobrador)
+    socios = Socio.objects.filter(cobrador=cobrador)
+    return render (request,'cobrador_listadosocios.html',{'socios':socios,'cobrador':cobrador})
+        
+
 ##AÑO
 class AnioList(ListView):
     model = Anio
@@ -221,6 +274,7 @@ class AnioCreate(CreateView):
     success_url = reverse_lazy('listado_anio')
 
     def form_valid(self, form):
+        
         year = form.instance.anio
         monto= form.instance.monto_cuota
         
@@ -240,10 +294,38 @@ class AnioUpdate(UpdateView):
     template_name = 'anio_form.html'
     success_url = reverse_lazy('listado_anio')
 
+    def form_valid(self, form):
+
+        now = datetime.now()
+        current_year = now.year
+        current_month = now.month
+
+        year = form.instance.anio  
+        monto= form.instance.monto_cuota
+        
+        socios = Socio.objects.all()
+
+        for socio in socios:
+           
+            registro = socio.registro
+            cuotas = Cuota.objects.filter(registro = registro, socio = socio, aniocuota = year)
+            for cuota in cuotas:
+                if (cuota.nrocuota >= current_month) and (cuota.pago == "no"):
+                    cuota.total = monto
+                    cuota.save()
+
+        return super(AnioUpdate, self).form_valid(form)
+
+
 class AnioDelete(DeleteView):
     model = Anio
     template_name = 'anio_delete.html'
     success_url = reverse_lazy('listado_anio')
+
+def anio_updatecuota(request):
+    anios = Anio.objects.all()
+    return render(request, 'anio_updatecuota.html',{'anios': anios})
+
 
 ## CUOTA
 def cuota_view(request,id_cuota, id_socio):
@@ -267,11 +349,49 @@ def cuota_pagar(request,id_cuota, id_socio):
     cuota.save()
     return redirect('socio_detail',id_socio = id_socio)
 
+def cuota_anular(request,id_cuota, id_socio):
+    cuota = Cuota.objects.get(id = id_cuota)
+    fecha = None
+    cuota.pago = "no"
+    cuota.fecha_pago = None
+    cuota.save()
+    return redirect('socio_detail',id_socio = id_socio)
+
 def cuotas_deuda(request):
 
     cuotas = Cuota.objects.filter(pago='no')
 
     return render(request, 'deudas.html',{'cuotas': cuotas})
+
+##REPORTES PDF
+
+def cobrador_generate_pdf(request, id_cobrador):
+    
+    cobrador = Cobrador.objects.get(id= id_cobrador)
+    socios = Socio.objects.filter(cobrador = cobrador)
+    
+    return cobrador_render_pdf(cobrador, socios)
+
+def cobrador_render_pdf(cobrador, socios):
+    cuotas = Cuota.objects.all()
+    cuotas_cobrador = []
+    for cuota in cuotas:
+        if cuota.socio in socios:
+            cuotas_cobrador.append(cuota)
+
+    html_string = render_to_string(
+        'cobrador_socios_pdf.html',
+        {'cobrador': cobrador, 'socios':socios, 'cuotas_cobrador':cuotas_cobrador}
+    )
+
+    html = HTML(string=html_string)
+    html.write_pdf(target='/tmp/cobradorsocios.pdf')
+
+    fs = FileSystemStorage('/tmp')
+    with fs.open('cobradorsocios.pdf') as pdf:
+        response = HttpResponse(pdf, content_type='application/pdf')
+        response['Content-Disposition'] = 'inline; filename="cobradorsocios.pdf"'
+        return response
 
 def reporte_cuota(request,id_cuota, id_socio):
     cuota = Cuota.objects.get(id = id_cuota)

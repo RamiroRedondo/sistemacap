@@ -1,0 +1,14 @@
+{% extends "base_generic.html" %}
+{% block content %}
+
+<form method="post">
+	{% csrf_token %}
+	<h3>¿Desea dar de alta el registro de socio de {{ socio.nombre }} {{ socio.apellido }} ?</h3>
+
+	<a class="btn btn-default" href="{% url 'socio_daralta' socio.id%}">Si, Dar dalta</a>
+	<a class="btn btn-default" href="{% url 'listado_sociosbaja' %}">Cancelar</a>
+
+	
+
+</form>
+{% endblock %}

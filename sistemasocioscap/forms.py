@@ -99,7 +99,7 @@ class CuotaForm(forms.ModelForm):
 			'nrocuota': forms.TextInput(attrs={'class':'form-control','readonly':'readonly'}),
 			'mes': forms.TextInput(attrs={'class':'form-control','readonly':'readonly'}),
 			'pago': forms.Select(attrs={'class':'form-control'}),
-			'fecha_pago': forms.DateInput(),
+			'fecha_pago': forms.DateInput(attrs={'readonly':'readonly'}),
 			'nrosocio': forms.TextInput(attrs={'class':'form-control'}),
 			'total': forms.TextInput(attrs={'class':'form-control','readonly':'readonly'}),
 			'aniocuota': forms.TextInput(attrs={'class':'form-control','readonly':'readonly'}),

@@ -1,0 +1,49 @@
+{% extends "base_generic.html" %}
+
+  
+{% block content %}
+
+<h4>Listado de socios del cobrador: {{cobrador.nombre}} {{cobrador.apellido}}  </h4>
+
+
+  <style>
+  table {
+    font-family: arial, sans-serif;
+    font-size: :large;
+    border-collapse: collapse;
+    width: 100%;
+  }
+
+  td, th {
+    border: 1px solid #462b2b;
+    text-align: left;
+    padding: 27px;
+  }
+
+tr:nth-child(even) {
+  background-color: #dddddd;
+}
+</style>
+ 
+
+                                            
+  {% if cuotas_cobrador %}
+  <table class="tablasocios" style="">
+    
+  {% for cuota in cuotas_cobrador %}
+  <tr>
+  <td>Cuota: {{cuota.nrocuota}} - {{cuota.mes}}
+  </td>
+
+  <td>Total: $ {{cuota.total}}</td>
+
+  <td>Socio: {{cuota.socio.nombre}} {{ cuota.socio.apellido}}</td>
+</tr>
+  {% endfor %}
+  {% endif %}
+
+ 
+</table>
+{% endblock %}
+{% load static %} 
+<link rel="stylesheet" href="{% static 'css/styles.css' %}">
